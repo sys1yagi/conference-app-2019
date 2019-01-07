@@ -5,6 +5,7 @@ import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.data.repository.SessionRepository
 import io.github.droidkaigi.confsched2019.di.PageScope
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.ext.android.coroutineScope
 import io.github.droidkaigi.confsched2019.model.LoadingState
 import io.github.droidkaigi.confsched2019.model.Session
@@ -18,8 +19,9 @@ import javax.inject.Inject
 class SessionContentsActionCreator @Inject constructor(
     override val dispatcher: Dispatcher,
     private val sessionRepository: SessionRepository,
-    @PageScope private val lifecycle: Lifecycle
-) : CoroutineScope by lifecycle.coroutineScope,
+    @PageScope private val lifecycle: Lifecycle,
+    appCoroutineDispatchers: AppCoroutineDispatchers
+) : CoroutineScope by lifecycle.coroutineScope(appCoroutineDispatchers),
     ErrorHandler {
     fun refresh() = launch {
         try {

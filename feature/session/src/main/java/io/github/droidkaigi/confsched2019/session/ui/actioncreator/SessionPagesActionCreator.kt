@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.di.PageScope
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.ext.android.coroutineScope
 import io.github.droidkaigi.confsched2019.model.Lang
 import io.github.droidkaigi.confsched2019.model.Room
@@ -17,8 +18,9 @@ import javax.inject.Inject
 @PageScope
 class SessionPagesActionCreator @Inject constructor(
     override val dispatcher: Dispatcher,
-    @PageScope private val lifecycle: Lifecycle
-) : CoroutineScope by lifecycle.coroutineScope,
+    @PageScope private val lifecycle: Lifecycle,
+    appCoroutineDispatchers: AppCoroutineDispatchers
+) : CoroutineScope by lifecycle.coroutineScope(appCoroutineDispatchers),
     ErrorHandler {
     fun load(sessions: List<Session>) {
         dispatcher.launchAndDispatch(Action.SessionsLoaded(sessions))

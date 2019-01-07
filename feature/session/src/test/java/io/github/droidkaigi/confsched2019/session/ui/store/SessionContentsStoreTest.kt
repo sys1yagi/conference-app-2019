@@ -4,10 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
 import io.github.droidkaigi.confsched2019.dummySessionData
-import io.github.droidkaigi.confsched2019.ext.android.CoroutinePlugin
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.ext.android.changedForever
 import io.github.droidkaigi.confsched2019.model.LoadingState
-import io.github.droidkaigi.confsched2019.model.Session
 import io.github.droidkaigi.confsched2019.model.SessionContents
 import io.kotlintest.shouldBe
 import io.mockk.MockKAnnotations
@@ -24,12 +23,11 @@ class SessionContentsStoreTest {
 
     @Before fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        CoroutinePlugin.mainDispatcherHandler = { Dispatchers.Default }
     }
 
     @Test fun loadingState() = runBlocking<Unit> {
         val dispatcher = Dispatcher()
-        val sessionsStore = SessionContentsStore(dispatcher)
+        val sessionsStore = SessionContentsStore(dispatcher, AppCoroutineDispatchers(Dispatchers.Default, mockk(), mockk()))
         val observer = mockk<(LoadingState?) -> Unit>(relaxed = true)
 
         sessionsStore.loadingState.changedForever(observer)
@@ -47,7 +45,7 @@ class SessionContentsStoreTest {
 
     @Test fun sessions() = runBlocking<Unit> {
         val dispatcher = Dispatcher()
-        val sessionsStore = SessionContentsStore(dispatcher)
+        val sessionsStore = SessionContentsStore(dispatcher, AppCoroutineDispatchers(Dispatchers.Default, mockk(), mockk()))
         val observer: (SessionContents) -> Unit = mockk(relaxed = true)
         sessionsStore.sessionContents.changedForever(observer)
         val dummySessionContents = SessionContents.EMPTY.copy(sessions = dummySessionData())

@@ -8,6 +8,7 @@ import io.github.droidkaigi.confsched2019.ext.android.coroutineScope
 import io.github.droidkaigi.confsched2019.model.LoadingState
 import io.github.droidkaigi.confsched2019.system.actioncreator.ErrorHandler
 import io.github.droidkaigi.confsched2019.data.repository.SponsorRepository
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,8 +16,9 @@ import javax.inject.Inject
 class SponsorActionCreator @Inject constructor(
     override val dispatcher: Dispatcher,
     private val sponsorRepository: SponsorRepository,
-    @PageScope private val lifecycle: Lifecycle
-) : CoroutineScope by lifecycle.coroutineScope,
+    @PageScope private val lifecycle: Lifecycle,
+    appCoroutineDispatchers: AppCoroutineDispatchers
+) : CoroutineScope by lifecycle.coroutineScope(appCoroutineDispatchers),
     ErrorHandler {
     fun load() = launch {
         try {
