@@ -5,9 +5,8 @@ import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.data.repository.SessionRepository
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
 import io.github.droidkaigi.confsched2019.dummySessionData
-import io.github.droidkaigi.confsched2019.ext.android.CoroutinePlugin
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.firstDummySpeechSession
-import io.github.droidkaigi.confsched2019.model.Filters
 import io.github.droidkaigi.confsched2019.model.LoadingState
 import io.github.droidkaigi.confsched2019.model.SessionContents
 import io.github.droidkaigi.confsched2019.widget.component.TestLifecycleOwner
@@ -16,6 +15,7 @@ import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -27,7 +27,6 @@ class SessionContentsActionCreatorTest {
 
     @Before fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        CoroutinePlugin.mainDispatcherHandler = { Dispatchers.Default }
     }
 
     @Test fun load() = runBlocking<Unit> {
@@ -36,7 +35,8 @@ class SessionContentsActionCreatorTest {
         val sessionsActionCreator = SessionContentsActionCreator(
             dispatcher,
             sessionRepository,
-            lifecycleOwner.lifecycle
+            lifecycleOwner.lifecycle,
+            AppCoroutineDispatchers(Dispatchers.Default, mockk(), mockk())
         )
 
         sessionsActionCreator.load()
@@ -59,7 +59,8 @@ class SessionContentsActionCreatorTest {
         val sessionsActionCreator = SessionContentsActionCreator(
             dispatcher,
             sessionRepository,
-            lifecycleOwner.lifecycle
+            lifecycleOwner.lifecycle,
+            AppCoroutineDispatchers(Dispatchers.Default, mockk(), mockk())
         )
 
         sessionsActionCreator.toggleFavorite(

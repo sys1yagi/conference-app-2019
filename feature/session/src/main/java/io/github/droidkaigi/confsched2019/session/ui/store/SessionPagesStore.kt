@@ -7,6 +7,7 @@ import com.shopify.livedataktx.combineWith
 import com.shopify.livedataktx.map
 import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.ext.android.requireValue
 import io.github.droidkaigi.confsched2019.ext.android.toLiveData
 import io.github.droidkaigi.confsched2019.model.Filters
@@ -16,28 +17,29 @@ import kotlinx.coroutines.channels.map
 import javax.inject.Inject
 
 class SessionPagesStore @Inject constructor(
-    dispatcher: Dispatcher
+    dispatcher: Dispatcher,
+    appCoroutineDispatchers: AppCoroutineDispatchers
 ) : ViewModel() {
     private val sessions: LiveData<List<Session>> = dispatcher
         .subscribe<Action.SessionsLoaded>()
         .map { it.sessions }
-        .toLiveData(listOf())
+        .toLiveData(listOf(), appCoroutineDispatchers)
 
     private val roomFilterChanged = dispatcher
         .subscribe<Action.RoomFilterChanged>()
-        .toLiveData()
+        .toLiveData(appCoroutineDispatchers = appCoroutineDispatchers)
 
     private val categoryFilterChanged = dispatcher
         .subscribe<Action.CategoryFilterChanged>()
-        .toLiveData()
+        .toLiveData(appCoroutineDispatchers = appCoroutineDispatchers)
 
     private val langFilterChanged = dispatcher
         .subscribe<Action.LangFilterChanged>()
-        .toLiveData()
+        .toLiveData(appCoroutineDispatchers = appCoroutineDispatchers)
 
     private val filterCleared = dispatcher
         .subscribe<Action.FilterCleared>()
-        .toLiveData()
+        .toLiveData(appCoroutineDispatchers = appCoroutineDispatchers)
 
     val filters = MediatorLiveData<Filters>().apply {
         value = Filters()
@@ -85,7 +87,7 @@ class SessionPagesStore @Inject constructor(
     val selectedTab: LiveData<SessionPage> = dispatcher
         .subscribe<Action.SessionPageSelected>()
         .map { it.sessionPage }
-        .toLiveData(SessionPage.pages[0])
+        .toLiveData(SessionPage.pages[0], appCoroutineDispatchers)
 
     fun filteredSessionsByDay(day: Int): LiveData<List<Session>> {
         return filteredSessions
