@@ -9,7 +9,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
-@MainThread fun <T> ReceiveChannel<T>.toSingleLiveData(defaultValue: T? = null): SingleLiveData<T> {
+@MainThread fun <T> ReceiveChannel<T>.toSingleLiveData(
+    defaultValue: T? = null,
+    appCoroutineDispatchers: AppCoroutineDispatchers
+): SingleLiveData<T> {
     return object : SingleLiveData<T>(), CoroutineScope by GlobalScope {
         lateinit var job: Job
 
@@ -21,7 +24,7 @@ import kotlinx.coroutines.launch
 
         override fun onActive() {
             super.onActive()
-            job = launch(CoroutinePlugin.mainDispatcher) {
+            job = launch(appCoroutineDispatchers.Main) {
                 for (element in this@toSingleLiveData) {
                     postValue(element)
                 }
@@ -36,7 +39,8 @@ import kotlinx.coroutines.launch
 }
 
 @MainThread fun <T> ReceiveChannel<T>.toLiveData(
-    defaultValue: T? = null
+    defaultValue: T? = null,
+    appCoroutineDispatchers: AppCoroutineDispatchers
 ): LiveData<T> {
     return object : LiveData<T>(), CoroutineScope by GlobalScope {
         lateinit var job: Job
@@ -49,7 +53,7 @@ import kotlinx.coroutines.launch
 
         override fun onActive() {
             super.onActive()
-            job = launch(CoroutinePlugin.mainDispatcher) {
+            job = launch(appCoroutineDispatchers.Main) {
                 for (element in this@toLiveData) {
                     postValue(element)
                 }

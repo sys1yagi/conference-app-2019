@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.di.PageScope
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.ext.android.coroutineScope
 import io.github.droidkaigi.confsched2019.model.LoadingState
 import io.github.droidkaigi.confsched2019.system.actioncreator.ErrorHandler
@@ -13,8 +14,9 @@ import javax.inject.Inject
 
 class FloorMapActionCreator @Inject constructor(
     override val dispatcher: Dispatcher,
-    @PageScope private val lifecycle: Lifecycle
-) : CoroutineScope by lifecycle.coroutineScope,
+    @PageScope private val lifecycle: Lifecycle,
+    appCoroutineDispatchers: AppCoroutineDispatchers
+) : CoroutineScope by lifecycle.coroutineScope(appCoroutineDispatchers),
     ErrorHandler {
 
     fun load() = launch {

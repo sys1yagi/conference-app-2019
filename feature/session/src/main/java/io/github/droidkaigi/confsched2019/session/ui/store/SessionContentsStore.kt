@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched2019.session.ui.store
 import androidx.lifecycle.LiveData
 import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.ext.android.mapNotNull
 import io.github.droidkaigi.confsched2019.ext.android.requireValue
 import io.github.droidkaigi.confsched2019.ext.android.toLiveData
@@ -16,12 +17,13 @@ import javax.inject.Singleton
 
 @Singleton
 class SessionContentsStore @Inject constructor(
-    dispatcher: Dispatcher
+    dispatcher: Dispatcher,
+    appCoroutineDispatchers: AppCoroutineDispatchers
 ) {
     val loadingState = dispatcher
         .subscribe<Action.SessionLoadingStateChanged>()
         .map { it.loadingState }
-        .toLiveData(LoadingState.INITIALIZED)
+        .toLiveData(LoadingState.INITIALIZED, appCoroutineDispatchers)
     val isInitialized: Boolean get() = loadingState.value == LoadingState.INITIALIZED
     val isLoading get() = loadingState.value == LoadingState.LOADING
     val isLoaded: Boolean get() = loadingState.value == LoadingState.LOADED
@@ -29,7 +31,7 @@ class SessionContentsStore @Inject constructor(
     val sessionContents = dispatcher
         .subscribe<Action.SessionContentsLoaded>()
         .map { it.sessionContents }
-        .toLiveData(SessionContents.EMPTY)
+        .toLiveData(SessionContents.EMPTY, appCoroutineDispatchers)
     val sessions get() = sessionContents.requireValue().sessions
     val langs get() = sessionContents.requireValue().langs
     val categorys get() = sessionContents.requireValue().category

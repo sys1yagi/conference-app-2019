@@ -6,6 +6,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
+import io.github.droidkaigi.confsched2019.ext.android.AppCoroutineDispatchers
 import io.github.droidkaigi.confsched2019.ext.android.toSingleLiveData
 import io.github.droidkaigi.confsched2019.model.SessionPage
 import io.github.droidkaigi.confsched2019.widget.BottomSheetBehavior
@@ -14,6 +15,7 @@ import kotlinx.coroutines.channels.map
 
 class SessionPageStore @AssistedInject constructor(
     dispatcher: Dispatcher,
+    appCoroutineDispatchers: AppCoroutineDispatchers,
     @Assisted val sessionPage: SessionPage
 ) : ViewModel() {
     @AssistedInject.Factory
@@ -25,11 +27,11 @@ class SessionPageStore @AssistedInject constructor(
         .subscribe<Action.BottomSheetFilterStateChanged>()
         .filter { it.page == sessionPage }
         .map { it.bottomSheetState }
-        .toSingleLiveData(BottomSheetBehavior.STATE_EXPANDED)
+        .toSingleLiveData(BottomSheetBehavior.STATE_EXPANDED, appCoroutineDispatchers)
 
     val toggleFilterSheet: LiveData<Unit> = dispatcher
         .subscribe<Action.BottomSheetFilterToggled>()
         .filter { it.page == sessionPage }
         .map { Unit }
-        .toSingleLiveData(Unit)
+        .toSingleLiveData(Unit, appCoroutineDispatchers)
 }
