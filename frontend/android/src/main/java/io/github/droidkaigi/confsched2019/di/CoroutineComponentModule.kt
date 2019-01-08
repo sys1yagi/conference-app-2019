@@ -7,8 +7,7 @@ import javax.inject.Singleton
 
 @Module
 object CoroutineComponentModule {
-    @JvmStatic @Provides @Singleton fun provideAppCoroutineDispatchers(
-    ): AppCoroutineDispatchers {
+    @JvmStatic @Provides @Singleton fun provideAppCoroutineDispatchers(): AppCoroutineDispatchers {
         return AppCoroutineDispatchers()
     }
 }

@@ -19,8 +19,13 @@ import kotlinx.coroutines.launch
  * **Beware**: if the current state is lower than the passed [activeWhile] state, you'll get an
  * already cancelled scope.
  */
-fun Lifecycle.createScope(activeWhile: Lifecycle.State, appCoroutineDispatchers: AppCoroutineDispatchers): CoroutineScope {
-    return CoroutineScope(createJob(activeWhile, appCoroutineDispatchers) + appCoroutineDispatchers.Main)
+fun Lifecycle.createScope(
+    activeWhile: Lifecycle.State,
+    appCoroutineDispatchers: AppCoroutineDispatchers
+): CoroutineScope {
+    return CoroutineScope(
+        createJob(activeWhile, appCoroutineDispatchers) + appCoroutineDispatchers.Main
+    )
 }
 
 /**
@@ -31,7 +36,10 @@ fun Lifecycle.createScope(activeWhile: Lifecycle.State, appCoroutineDispatchers:
  * **Beware**: if the current state is lower than the passed [activeWhile] state, you'll get an
  * already cancelled job.
  */
-fun Lifecycle.createJob(activeWhile: Lifecycle.State = INITIALIZED, appCoroutineDispatchers: AppCoroutineDispatchers): Job {
+fun Lifecycle.createJob(
+    activeWhile: Lifecycle.State = INITIALIZED,
+    appCoroutineDispatchers: AppCoroutineDispatchers
+): Job {
     require(activeWhile != Lifecycle.State.DESTROYED) {
         "DESTROYED is a terminal state that is forbidden for createJob(…), to avoid leaks."
     }

@@ -29,7 +29,8 @@ fun Lifecycle.coroutineScope(appCoroutineDispatchers: AppCoroutineDispatchers): 
  * This is an inline property, just there for convenient usage from any [LifecycleOwner],
  * like FragmentActivity, AppCompatActivity, Fragment and LifecycleService.
  */
-inline fun LifecycleOwner.coroutineScope(appCoroutineDispatchers: AppCoroutineDispatchers) = lifecycle.coroutineScope(appCoroutineDispatchers)
+inline fun LifecycleOwner.coroutineScope(appCoroutineDispatchers: AppCoroutineDispatchers) =
+    lifecycle.coroutineScope(appCoroutineDispatchers)
 
 /**
  * Returns a [SupervisorJob] that will be cancelled as soon as the [Lifecycle] reaches
