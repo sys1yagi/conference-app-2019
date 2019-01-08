@@ -5,9 +5,7 @@ import io.github.droidkaigi.confsched2019.action.Action
 import io.github.droidkaigi.confsched2019.data.repository.SessionRepository
 import io.github.droidkaigi.confsched2019.dispatcher.Dispatcher
 import io.github.droidkaigi.confsched2019.dummySessionData
-import io.github.droidkaigi.confsched2019.ext.android.CoroutinePlugin
 import io.github.droidkaigi.confsched2019.firstDummySpeechSession
-import io.github.droidkaigi.confsched2019.model.Filters
 import io.github.droidkaigi.confsched2019.model.LoadingState
 import io.github.droidkaigi.confsched2019.model.SessionContents
 import io.github.droidkaigi.confsched2019.widget.component.TestLifecycleOwner
@@ -18,6 +16,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
 
@@ -27,7 +26,7 @@ class SessionContentsActionCreatorTest {
 
     @Before fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        CoroutinePlugin.mainDispatcherHandler = { Dispatchers.Default }
+        Dispatchers.setMain(Dispatchers.Default)
     }
 
     @Test fun load() = runBlocking<Unit> {

@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.State.INITIALIZED
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 /**
  * from: https://github.com/Kotlin/kotlinx.coroutines/pull/760
- * Modify to use [CoroutinePlugin] for testing
+ * Modify to use [Dispatchers.setMain()] for testing
  * Returns a [CoroutineScope] that uses [Dispatchers.Main] by default, and that will be cancelled as
  * soon as this [Lifecycle] [currentState][Lifecycle.getCurrentState] is no longer
  * [at least][Lifecycle.State.isAtLeast] the passed [activeWhile] state.

@@ -30,6 +30,7 @@ object Dep {
         }
 
         val slf4j = "org.slf4j:slf4j-simple:1.7.25"
+        val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.coroutinesVersion}"
     }
 
     object AndroidX {
@@ -67,7 +68,7 @@ object Dep {
         val version = "1.3.11"
         val stdlibCommon = "org.jetbrains.kotlin:kotlin-stdlib-common:$version"
         val stdlibJvm = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version"
-        val coroutinesVersion = "1.0.1"
+        val coroutinesVersion = "1.1.0"
         val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
         val androidCoroutinesDispatcher =
             "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"

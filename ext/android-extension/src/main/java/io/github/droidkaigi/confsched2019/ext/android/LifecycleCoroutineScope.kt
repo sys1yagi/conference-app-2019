@@ -3,13 +3,14 @@ package io.github.droidkaigi.confsched2019.ext.android
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * from: https://github.com/Kotlin/kotlinx.coroutines/pull/760
- * Modify to use [CoroutinePlugin] for testing
+ * Modify to use [Dispatchers.setMain()] for testing
  * Returns a [CoroutineScope] that uses [Dispatchers.Main] by default, and that is cancelled when
  * the [Lifecycle] reaches [Lifecycle.State.DESTROYED] state.
  *
